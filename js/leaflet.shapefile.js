@@ -115,5 +115,3 @@ function style(feature) {
 		fillOpacity: 0.7,
 	};
 }
-
-L.geoJson(statesData, { style: style }).addTo(mymap);

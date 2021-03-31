@@ -63,6 +63,41 @@
 
 						const shapefile = new L.Shapefile('frankfurt.zip');
 						shapefile.addTo(mymap);
+						var shpfile = new L.Shapefile('frankfurt.zip', {
+							style: function (feature) {
+								return {
+									color: '#addd8e',
+									fillColor: '#31a354',
+									fillOpacity: 0.3,
+								};
+							},
+							onEachFeature: function (feature, layer) {
+								if (feature.properties) {
+									layer.bindPopup(
+										Object.keys(feature.properties)
+											.map(function (k) {
+												return k + ': ' + feature.properties[k];
+											})
+											.join('<br />'),
+										{
+											maxHeight: 200,
+										}
+									);
+								}
+							},
+						});
+						shpfile.addTo(mymap);
+
+						/*var sfile = new L.Shapefile('frankfurt.zip', {
+							style: function (feature) {
+								return {
+									color: '#addd8e',
+									fillColor: '#fec44f',
+									fillOpacity: 0.3,
+								};
+							},
+						});
+						sfile.addTo(mymap);*/
 
 						L.tileLayer(
 							'https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=4X6u9TX1LcJZ3haq4f2n',
@@ -76,23 +111,7 @@
 								accessToken: '4X6u9TX1LcJZ3haq4f2n',
 							}
 						).addTo(mymap);
-						L.shapefile = function getColor(d) {
-							return d > 1000
-								? '#800026'
-								: d > 500
-								? '#BD0026'
-								: d > 200
-								? '#E31A1C'
-								: d > 100
-								? '#FC4E2A'
-								: d > 50
-								? '#FD8D3C'
-								: d > 20
-								? '#FEB24C'
-								: d > 10
-								? '#FED976'
-								: '#FFEDA0';
-						};
+
 						L.shapefile = function style(feature) {
 							return {
 								fillColor: getColor(feature.properties.density),
@@ -103,8 +122,6 @@
 								fillOpacity: 0.7,
 							};
 						};
-						L.geoJson(statesData, { style: style }).addTo(mymap);
-
 						var marker = L.marker([51.5, -0.09]).addTo(mymap);
 						var marker = L.marker([52.5, -0.1]).addTo(mymap);
 						var marker = L.marker([53.5, -0.08]).addTo(mymap);
